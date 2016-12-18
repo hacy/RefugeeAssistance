@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" 
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext 
+						http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd 
+						http://www.liquibase.org/xml/ns/dbchangelog 
+						http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="mhacioglu (generated)" id="1455446411127-1">
+        <createTable tableName="hibernate_sequences">
+            <column name="sequence_name" type="VARCHAR(255)"/>
+            <column name="sequence_next_hi_value" type="BIGINT"/>
+        </createTable>    
+    
+    	<createTable tableName="turkey_city">
+            <column  name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="turkey_city_pkey" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>            
+            <column name="ascii_name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>              
+        <createTable tableName="turkey_city_district">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="turkey_city_district_pkey" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>            
+            <column name="ascii_name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="turkey_city_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="turkey_city_id" baseTableName="turkey_city_district"
+                         constraintName="fk_turkey_city_district_city"
+                         referencedColumnNames="id" referencedTableName="turkey_city"/>
+
+        <createTable tableName="turkey_semt">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="turkey_semt_pkey" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>            
+            <column name="lower_case_name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="upper_case_name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="zip_code" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="turkey_city_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="turkey_city_district_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="turkey_city_id" baseTableName="turkey_semt"
+                         constraintName="fk_turkey_semt_city"
+                         referencedColumnNames="id" referencedTableName="turkey_city"/>  
+        <addForeignKeyConstraint baseColumnNames="turkey_city_district_id" baseTableName="turkey_semt"
+                         constraintName="fk_turkey_semt_city_district"
+                         referencedColumnNames="id" referencedTableName="turkey_city_district"/>  
+                                                          
+        <createTable tableName="turkey_mahalle">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="turkey_mahalle_pkey" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>            
+            <column name="lower_case_name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="upper_case_name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>            
+            <column name="order_num" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="turkey_city_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="turkey_city_district_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="turkey_semt_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="turkey_city_id" baseTableName="turkey_mahalle"
+                         constraintName="fk_turkey_mahalle_city"
+                         referencedColumnNames="id" referencedTableName="turkey_city"/>  
+        <addForeignKeyConstraint baseColumnNames="turkey_city_district_id" baseTableName="turkey_mahalle"
+                         constraintName="fk_turkey_mahalle_city_district"
+                         referencedColumnNames="id" referencedTableName="turkey_city_district"/> 
+        <addForeignKeyConstraint baseColumnNames="turkey_semt_id" baseTableName="turkey_mahalle"
+                         constraintName="fk_turkey_mahalle_semt"
+                         referencedColumnNames="id" referencedTableName="turkey_semt"/> 
+
+        <createTable tableName="address">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="address_pkey" nullable="false"/>
+            </column>
+            <column name="create_date" type="TIMESTAMP(6)"/>
+            <column name="update_date" type="TIMESTAMP(6)"/>
+            <column name="avenue" type="VARCHAR(255)"/>
+            <column name="country" type="VARCHAR(255)"/>
+            <column name="detail" type="VARCHAR(255)"/>
+            <column name="region" type="INT"/>
+            <column name="state" type="VARCHAR(255)"/>
+            <column name="zip_code" type="VARCHAR(255)"/>
+            <column name="city_id" type="BIGINT"/>
+            <column name="district_id" type="BIGINT"/>
+            <column name="latitude" type="DOUBLE"/>
+            <column name="longitude" type="DOUBLE"/>
+            
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="city_id" baseTableName="address"
+                         constraintName="fk_address_city"
+                         referencedColumnNames="id" referencedTableName="turkey_city"/>  
+        <addForeignKeyConstraint baseColumnNames="district_id" baseTableName="address"
+                         constraintName="fk_address_city_district"
+                         referencedColumnNames="id" referencedTableName="turkey_city_district"/>  
+    
+        <createTable tableName="ref_user">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="username" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>                       
+            <column name="first_name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>                        
+            <column name="last_name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gender" type="VARCHAR(255)"/>            
+            <column name="birth_date" type="TIMESTAMP"/>
+            <column name="language" type="VARCHAR(255)"/>
+            <column name="nationality" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="enabled" type="BOOL">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_expired" type="BOOL">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_locked" type="BOOL">
+                <constraints nullable="false"/>
+            </column>
+            <column name="credentials_expired" type="BOOL">
+                <constraints nullable="false"/>
+            </column>            
+            
+            <column name="latitude" type="DOUBLE"/>
+            <column name="longitude" type="DOUBLE"/>
+            
+            <column name="has_license" type="BOOL"/>
+            <column name="create_date" type="TIMESTAMP"/>
+            <column name="update_date" type="TIMESTAMP"/>        
+        </createTable>        
+        
+        <addUniqueConstraint columnNames="username" tableName="ref_user" 
+        					constraintName="uk_a8txewtara0bgjtgffxuxrypm"/>
+        
+                
+        <createTable tableName="school">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="website" type="VARCHAR(100)"/>                       
+            <column name="type" type="VARCHAR(50)"/>
+            <column name="phone_number" type="VARCHAR(50)"/>
+            <column name="address_id" type="BIGINT"/>
+            <column name="email" type="VARCHAR(100)"/>   
+                                         
+            <column name="latitude" type="DOUBLE"/>
+            <column name="longitude" type="DOUBLE"/>
+            
+            <column name="create_date" type="TIMESTAMP"/>
+            <column name="update_date" type="TIMESTAMP"/>    
+        </createTable>        
+        
+        <addForeignKeyConstraint baseColumnNames="address_id" baseTableName="school"
+                         constraintName="fk_school_address"
+                         referencedColumnNames="id" referencedTableName="address"/>                 
+        
+        <createTable tableName="vocational_training">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="website" type="VARCHAR(100)"/>                       
+            <column name="phone_number" type="VARCHAR(50)"/>
+            <column name="address_id" type="BIGINT"/>
+            <column name="vocation" type="VARCHAR(250)"/>   
+            <column name="cost" type="DOUBLE"/>     
+            <column name="latitude" type="DOUBLE"/>
+            <column name="longitude" type="DOUBLE"/>
+            <column name="create_date" type="TIMESTAMP"/>
+            <column name="update_date" type="TIMESTAMP"/>   
+        </createTable>        
+        
+        
+        <addForeignKeyConstraint baseColumnNames="address_id" baseTableName="vocational_training"
+                         constraintName="fk_vt_address"
+                         referencedColumnNames="id" referencedTableName="address"/>  
+        
+        
+         <createTable tableName="health_institution">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="website" type="VARCHAR(100)"/>                       
+            <column name="phone_number" type="VARCHAR(50)"/>
+            <column name="address_id" type="BIGINT"/>
+            <column name="email" type="VARCHAR(100)"/>    
+            
+            <column name="latitude" type="DOUBLE"/>
+            <column name="longitude" type="DOUBLE"/>                             
+            <column name="create_date" type="TIMESTAMP"/>
+            <column name="update_date" type="TIMESTAMP"/>   
+        </createTable>
+        
+        
+        <addForeignKeyConstraint baseColumnNames="address_id" baseTableName="health_institution"
+                         constraintName="fk_hinst_address"
+                         referencedColumnNames="id" referencedTableName="address"/>           
+      
+        
+        <createTable tableName="user_role">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="user_role_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint columnNames="name" tableName="user_role" 
+        					constraintName="uk_lnth8w122wgy7grrjlu8hjmuu"/>
+                                                      
+	</changeSet>
+	
+	<changeSet author="mhacioglu (generated)" id="1-2" runOnChange="true">
+		<sqlFile dbms="postgresql"
+            encoding="utf8"
+            endDelimiter="\nGO"
+            path="sql_scripts/il.sql"
+            relativeToChangelogFile="true"
+            splitStatements="true"
+            stripComments="true"/>
+		<sqlFile dbms="postgresql"
+            encoding="utf8"
+            endDelimiter="\nGO"
+            path="sql_scripts/ilce.sql"
+            relativeToChangelogFile="true"
+            splitStatements="true"
+            stripComments="true"/>
+		<sqlFile dbms="postgresql"
+            encoding="utf8"
+            endDelimiter="\nGO"
+            path="sql_scripts/semt.sql"
+            relativeToChangelogFile="true"
+            splitStatements="true"
+            stripComments="true"/>                            
+    </changeSet>
+    
+   <changeSet id="15" author="mhacioglu">
+		<comment>This change adds to ref_user table.</comment>
+		<addColumn tableName="ref_user">
+		<column name="user_role" type="varchar(40)" />
+		</addColumn>
+	</changeSet>
+ 
+ 
+</databaseChangeLog>

@@ -1,0 +1,62 @@
+liquibase:
+    context: production,test
+    
+server:
+    port: 4000
+    contextPath: /
+    
+root:
+    directory: /Users/mhacioglu/Documents/workspace/refugeeAssist
+home:
+    directory: writable:home    
+        
+management:
+    context-path: /system
+    security:
+        enabled: true
+        
+spring:
+    profiles:
+        active: dev
+    
+    datasource:
+        dataSourceClassName: org.postgresql.ds.PGPoolingDataSource
+        url: jdbc:postgresql://localhost:5432/refugeeassist_master_db
+        poolName: SpringBootHikariCP
+        username: postgres
+        password: 123456
+        testWhileIdle: true
+        validationQuery: SELECT 1
+        #platform: postgres
+        initialize: true
+        continueOnError: true
+        data: classpath:/sql_scripts/il_ilce.sql, classpath:/sql_scripts/semt.sql, classpath:/sql_scripts/mahalle.sql
+
+    jpa:
+        #database: POSTGRESQL
+        database-platform: org.hibernate.dialect.PostgreSQLDialect        
+        show-sql: false
+        openInView: false
+        generate-ddl: false
+        hibernate:
+            ddl-auto: none
+            naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+        properties:
+            hibernate.cache.use_second_level_cache: false
+            hibernate.cache.use_query_cache: false
+            hibernate.generate_statistics: true
+            hibernate.hbm2ddl.auto: validate
+            hibernate.default_schema: refugee
+
+logging:
+    file: /tmp/refugeeassist.log
+    level:
+        root: INFO
+        org.springframework.security: INFO
+
+
+multipart:
+    maxFileSize: 128000MB
+    maxRequestSize: 128000MB
+
+
